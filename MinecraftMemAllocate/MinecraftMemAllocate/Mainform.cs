@@ -12,6 +12,7 @@ namespace MinecraftMemAllocate
     public partial class Mainform : Form
     {
         public string Path;
+        public string Folder;
         public Mainform()
         {
             InitializeComponent();
@@ -30,10 +31,24 @@ namespace MinecraftMemAllocate
                 textBox1.Text = fdlg.FileName;
             }
         }
+        public void FindFolder()
+        {
+            FolderBrowserDialog fdlg = new FolderBrowserDialog();
+            if (fdlg.ShowDialog() == DialogResult.OK)
+            {
+                Folder = fdlg.SelectedPath;
+                textBox2.Text = fdlg.SelectedPath;
+            }
+        }
 
         private void button1_Click(object sender, EventArgs e)
         {
             FindFile();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            FindFolder();
         }
     }
     
