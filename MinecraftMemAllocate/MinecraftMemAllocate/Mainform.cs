@@ -13,9 +13,11 @@ namespace MinecraftMemAllocate
     {
         public string Path;
         public string Folder;
+        public float Mem;
         public Mainform()
         {
             InitializeComponent();
+            Mem = GetTotalMemoryInBytes() / 1048576000; //GB?
         }
         public void FindFile()
         {
@@ -23,7 +25,7 @@ namespace MinecraftMemAllocate
             fdlg.Title = "Minecraft.exe finder";
             fdlg.InitialDirectory = @"c:\";
             fdlg.Filter = "Minecraft.exe|Minecraft.exe";
-            fdlg.FilterIndex = 2;
+            fdlg.FilterIndex = 1;
             fdlg.RestoreDirectory = true;
             if (fdlg.ShowDialog() == DialogResult.OK)
             {
@@ -39,6 +41,11 @@ namespace MinecraftMemAllocate
                 Folder = fdlg.SelectedPath;
                 textBox2.Text = fdlg.SelectedPath;
             }
+        }
+
+        static ulong GetTotalMemoryInBytes()
+        {
+            return new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory;
         }
 
         private void button1_Click(object sender, EventArgs e)
