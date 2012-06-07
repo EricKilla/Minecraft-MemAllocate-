@@ -7,10 +7,8 @@ using System.Xml;
 using System.Xml.Linq;
 using Microsoft.VisualBasic.Devices;
 
-namespace MinecraftMemAllocate
-{
-    public partial class Mainform : Form
-    {
+namespace MinecraftMemAllocate{
+    public partial class Mainform : Form{
         string Path;
         float Mem;
         int MemMin = 500;
@@ -21,8 +19,7 @@ namespace MinecraftMemAllocate
         string ConfigFile = "Config.xml";
         string javadir;
 
-        public Mainform()
-        {
+        public Mainform(){
             InitializeComponent();
             Mem = GetTotalMemoryInBytes() / 1048576;//ToMB
             textBox5.Text = Mem.ToString() + "MB";
@@ -30,32 +27,25 @@ namespace MinecraftMemAllocate
             LocateJava();
         }
 
-        void LocateJava()
-        {
+        void LocateJava(){
             String path = Environment.GetEnvironmentVariable("path");
             String[] folders = path.Split(';');
-            foreach (String folder in folders)
-            {
-                if (File.Exists(folder + "java.exe"))
-                {
+            foreach (String folder in folders){
+                if (File.Exists(folder + "java.exe")){
                     this.javadir = folder + "/java.exe";
                     return;
-                }
-                else if (File.Exists(folder + "\\java.exe"))
-                {
+                }else if (File.Exists(folder + "\\java.exe")){
                     this.javadir = folder + "/java.exe";
                     return;
                 }
             }
-            if (javadir == null)
-            {
+            if (javadir == null){
                 MessageBox.Show("Unable to find your Java.exe (Not good)");
             }
         }
 
         bool _myTextBoxChanging = false;
-        void validateText(TextBox box)
-        {
+        void validateText(TextBox box){
             // stop multiple changes;
             if (_myTextBoxChanging)
                 return;
@@ -66,29 +56,23 @@ namespace MinecraftMemAllocate
                 return;
             string validText = "";
             int pos = box.SelectionStart;
-            for (int i = 0; i < text.Length; i++)
-            {
+            for (int i = 0; i < text.Length; i++){
                 bool badChar = false;
                 char s = text[i];
-                if (s == '.')
-                {
+                if (s == '.'){
                     badChar = true;
                 }
                 else if (s < '0' || s > '9')
                     badChar = true;
-
                 if (!badChar)
                     validText += s;
-                else
-                {
+                else{
                     if (i <= pos)
                         pos--;
                 }
             }
-            while (validText.Length >= 2 && validText[0] == '0')
-            {
-                if (validText[1] != '.')
-                {
+            while (validText.Length >= 2 && validText[0] == '0'){
+                if (validText[1] != '.'){
                     validText = validText.Substring(1);
                     if (pos < 2)
                         pos--;
@@ -96,7 +80,6 @@ namespace MinecraftMemAllocate
                 else
                     break;
             }
-
             if (pos > validText.Length)
                 pos = validText.Length;
             box.Text = validText;
@@ -104,17 +87,12 @@ namespace MinecraftMemAllocate
             _myTextBoxChanging = false;
         }
 
-        public void readAppConfig()
-        {
-            lock (xmlLock)
-            {
-                if (File.Exists(AppPath + "/" + ConfigFile))
-                {
+        public void readAppConfig(){
+            lock (xmlLock){
+                if (File.Exists(AppPath + "/" + ConfigFile)){
                     XmlTextReader xmlReader = new XmlTextReader(AppPath + "/" + ConfigFile);
-                    while (xmlReader.Read())
-                    {
-                        if (xmlReader.Name == "GeneralSettings")
-                        {
+                    while (xmlReader.Read()){
+                        if (xmlReader.Name == "GeneralSettings"){
                             Path = xmlReader.GetAttribute("Path").ToString(); textBox1.Text = Path;
                             MemMin = Int32.Parse(xmlReader.GetAttribute("MemMin")); textBox3.Text = MemMin.ToString();
                             MemMax = Int32.Parse(xmlReader.GetAttribute("MemMax")); textBox4.Text = MemMax.ToString();
@@ -125,59 +103,49 @@ namespace MinecraftMemAllocate
             }
         }
 
-        void FindFile()
-        {
+        void FindFile(){
             OpenFileDialog fdlg = new OpenFileDialog();
             fdlg.Title = "Minecraft.exe finder";
             fdlg.InitialDirectory = @"c:\";
             fdlg.Filter = "Minecraft.exe|Minecraft.exe";
             fdlg.FilterIndex = 1;
             fdlg.RestoreDirectory = true;
-            if (fdlg.ShowDialog() == DialogResult.OK)
-            {
+            if (fdlg.ShowDialog() == DialogResult.OK){
                 Path = fdlg.FileName;
                 textBox1.Text = fdlg.FileName;
             }
         }
 
-        static ulong GetTotalMemoryInBytes()
-        {
+        static ulong GetTotalMemoryInBytes(){
             return new ComputerInfo().AvailablePhysicalMemory;
         }
 
-        void button1_Click(object sender, EventArgs e)
-        {
+        void button1_Click(object sender, EventArgs e){
             FindFile();
         }
 
-        void button3_Click(object sender, EventArgs e)
-        {
+        void button3_Click(object sender, EventArgs e){
             SaveConfig();
             double Num;
             bool isNum = double.TryParse(textBox3.Text.Trim(), out Num);
-            if (!isNum)
-            {
+            if (!isNum){
                 MessageBox.Show("Invalid number at Minimum Memory");
                 return;
             }
             isNum = double.TryParse(textBox4.Text.Trim(), out Num);
-            if (!isNum)
-            {
+            if (!isNum){
                 MessageBox.Show("Invalid number at Maximum Memory");
                 return;
             }
-            if (MemMin < 10)
-            {
+            if (MemMin < 10){
                 MessageBox.Show("Minimum Memory cannot be less than 10mb");
                 return;
             }
-            if (MemMin > MemMax)
-            {
+            if (MemMin > MemMax){
                 MessageBox.Show("Minimum Memory cannot exceed the maximum");
                 return;
             }
-            if (MemMax > Mem || MemMin > Mem)
-            {
+            if (MemMax > Mem || MemMin > Mem){
                 MessageBox.Show("Memory values cannot exceed available RAM");
                 return;
             }
@@ -185,12 +153,9 @@ namespace MinecraftMemAllocate
             label2.Visible = true;
         }
 
-        void SaveConfig()
-        {
-            lock (xmlLock)
-            {
-                if (!Directory.Exists(AppPath))
-                {
+        void SaveConfig(){
+            lock (xmlLock){
+                if (!Directory.Exists(AppPath)){
                     Directory.CreateDirectory(AppPath);
                 }
                 XmlWriterSettings settings = new XmlWriterSettings();
@@ -209,8 +174,7 @@ namespace MinecraftMemAllocate
             }
         }
 
-        void OpenCmdWithCmds()
-        {
+        void OpenCmdWithCmds(){
             Process process = new Process();
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.FileName = "cmd.exe";
@@ -220,26 +184,21 @@ namespace MinecraftMemAllocate
             process.Start();
         }
 
-        void textBox3_TextChanged(object sender, EventArgs e)
-        {
-            if (textBox3.TextLength > 0)
-            {
+        void textBox3_TextChanged(object sender, EventArgs e){
+            if (textBox3.TextLength > 0){
                 validateText(textBox3);
                 MemMin = int.Parse(this.textBox3.Text);
             }
         }
 
-        void textBox4_TextChanged(object sender, EventArgs e)
-        {
-            if (textBox3.TextLength > 0)
-            {
+        void textBox4_TextChanged(object sender, EventArgs e){
+            if (textBox3.TextLength > 0){
                 validateText(textBox4);
                 MemMax = int.Parse(this.textBox4.Text);
             }
         }
 
-        private void label2_Click(object sender, EventArgs e)
-        {
+        private void label2_Click(object sender, EventArgs e){
 
         }
     }
