@@ -11,9 +11,9 @@ It's really easy to use too:
 * Find your minecraft.exe file
 * Set a minimum ammount of RAM for minecraft to use (More than 10mb)
 * Set a maximum ammount of RAM for minecraft to use (Cannot exceed available RAM)
-* Click 'Launch Minecraft'
+* Click 'Start Minecraft'
 
-If you find that nothing happens when you click 'Launch Minecraft', try lowering your maximum RAM.
+If you find that nothing happens when you click 'Start Minecraft', try lowering your maximum RAM.
 Any settings you make are saved, so you won't have to type them out again for the next time you use it.
 
 * You need Java for this to work (obviously).
